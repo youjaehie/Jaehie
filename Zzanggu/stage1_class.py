@@ -3,16 +3,6 @@ import json
 from pico2d import *
 from game_stage1 import  *
 
-class Pause:
-    image=None
-    def __init__(self):
-        if Pause.image == None:
-            Pause.image = load_image('resource\\pause.png')
-        self.pressed=False
-    def draw(self):
-        if self.pressed == True:
-            self.image.clip_draw_to_origin(0,0,1366,350,300,300,1000,300)
-
 class BackGround:
     image = None ;
     def __init__(self):
@@ -69,7 +59,7 @@ class Enemy:
     Whitedogimage = None
 
     ZzangaX = -20
-    ZzangaY = 95
+    ZzangaY = 92
     Zzangastate = Zzanga_RIGHT_RUN
     Zzangaframe = 0
 
@@ -78,6 +68,7 @@ class Enemy:
         self.erase = 1
         self.erase2 = 1
         self.hide = 1
+        self.frame = 0
         if Enemy.Zzangaimage ==None:
             Enemy.Zzangaimage = load_image('resource\\Zzanga.png')
         if Enemy.Whitedogimage == None:
@@ -96,7 +87,7 @@ class Enemy:
 
     def draw(self):
         if self.erase == 1:
-            self.Zzangaimage.draw(self.ZzangaX, self.ZzangaY)
+            self.Zzangaimage.clip_draw(self.frame * 70, 0, 70, 70, self.ZzangaX, self.ZzangaY)
         if self.erase2 == 0:
             self.Whitedogimage.draw(self.ZzangaX+80, self.ZzangaY-10)
 
@@ -104,6 +95,9 @@ class Enemy:
     def update(self):
         self.timer += 1
         self.hide += 1
+        self.frame += 1
+        if self.frame == 5:
+            self.frame = 0
         if self.timer == 100:
             self.Zzangaframe = (self.Zzangaframe + 1) % 6
             self.timer = 0
@@ -163,6 +157,9 @@ class Zzanggu:
 
     def update(self):
         self.handle_state[self.state](self)  # if가 없어짐 -> 처리속도,수정이 빠름
+        self.frame += 1
+        if self.frame == 5:
+            self.frame = 0
         if self.state == 2:
             self.Shoot -= 40
         else :
@@ -172,6 +169,7 @@ class Zzanggu:
         self.x, self.y = 70, 100
         self.Hp = 5
         self.Shoot = 5
+        self.frame = 0
         self.run_frame, self.jump_frame, self.ullaulla_frame = (0, 0, 0)
         self.run = load_image('resource\\Zzanggu.png')
         self.jump = load_image('resource\\Zzanggu_jump.png')
@@ -186,11 +184,10 @@ class Zzanggu:
         if Zzanggu.hurt_bgm==None:
             Zzanggu.hurt_bgm = load_music('resource\\hurt_bgm.mp3')
             Zzanggu.hurt_bgm.set_volume(80)
-            Zzanggu.hurt_bgm.repeat_play()
 
     def draw(self):
         if self.state == 0:
-            self.run.draw(self.x, self.y)
+            self.run.clip_draw(self.frame*87,0,87,87,self.x,self.y)
         elif self.state == 1:
             self.jump.draw(self.x, self.y)
         elif self.state == 2:

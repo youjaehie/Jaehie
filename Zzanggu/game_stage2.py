@@ -116,7 +116,8 @@ def update():
         zzanggu.state = 3
         if stone2.eat2 == 1:
             zzanggu.Hp -= 1
-            zzanggu.hurt_bgm.play()
+            zzanggu.hurt_bgm.play(1)
+            play_bgm.play()
         if zzanggu.Hp <= 0:
             game_framework.push_state(game_fail)
         stone.eat=0

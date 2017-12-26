@@ -26,7 +26,7 @@ def enter():
     third_stage = Third_stage()
     enemy = Enemy()
     leeseul = Leeseul()
-   # stone = Stone()
+    stone = Stone()
     item = Item()
     item2 = Item2()
     stone2 = Stone2()
@@ -108,7 +108,8 @@ def update():
         zzanggu.state = 3
         if stone.eat == 1:
             zzanggu.Hp -= 1
-            zzanggu.hurt_bgm.play()
+            zzanggu.hurt_bgm.play(1)
+            play_bgm.play()
         if zzanggu.Hp <= 0:
             game_framework.push_state(game_fail)
         stone.eat=0

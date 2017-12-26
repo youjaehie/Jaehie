@@ -67,6 +67,7 @@ class Enemy:
         self.erase = 1
         self.erase2 = 1
         self.hide = 1
+        self.frame=0
         if Enemy.Osuimage ==None:
             Enemy.Osuimage = load_image('resource\\Osu.png')
         if Enemy.Whitedogimage == None:
@@ -84,13 +85,16 @@ class Enemy:
 
     def draw(self):
         if self.erase == 1:
-            self.Osuimage.draw(self.OsuX, self.OsuY)
+            self.Osuimage.clip_draw(self.frame * 210, 0, 210, 210, self.OsuX, self.OsuY)
         if self.erase2 == 0:
             self.Whitedogimage.draw(self.OsuX+80, self.OsuY-10)
 
     def update(self):
         self.timer += 1
         self.hide += 1
+        self.frame += 1
+        if self.frame == 5:
+            self.frame = 0
         if self.timer == 100:
             self.Osuframe = (self.Osuframe + 1) % 6
             self.timer = 0
@@ -149,6 +153,9 @@ class Zzanggu:
 
     def update(self):
         self.handle_state[self.state](self)  # if가 없어짐 -> 처리속도,수정이 빠름
+        self.frame += 1
+        if self.frame == 5:
+            self.frame = 0
         if self.state == 2:
             self.Shoot -= 40
         else :
@@ -158,6 +165,7 @@ class Zzanggu:
         self.x, self.y = 70, 100
         self.Hp = 5
         self.Shoot = 5
+        self.frame=0
         self.run_frame, self.jump_frame, self.ullaulla_frame = (0, 0, 0)
         self.run = load_image('resource\\Zzanggu.png')
         self.jump = load_image('resource\\Zzanggu_jump.png')
@@ -177,7 +185,7 @@ class Zzanggu:
 
     def draw(self):
         if self.state == 0:
-            self.run.draw(self.x,self.y)
+            self.run.clip_draw(self.frame*87,0,87,87,self.x,self.y)
         elif self.state == 1:
             self.jump.draw(self.x, self.y)
         elif self.state == 2:
